@@ -1,0 +1,34 @@
+# Runs on GitHub's servers on every push. The badge in README.md turns red the
+# moment a result stops matching theory, which is the whole point: an
+# estimator that has quietly drifted away from the physics should be visible
+# without anyone having to run it.
+
+name: verify
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Check the model and estimators against closed-form theory
+        run: python3 verify.py
+
+      - name: Run the unit tests
+        run: python3 -m unittest discover -s tests -v
+
+      - name: Rebuild every figure from the model
+        run: python3 make_figures.py
