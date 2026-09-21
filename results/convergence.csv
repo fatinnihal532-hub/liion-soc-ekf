@@ -1,0 +1,3 @@
+Estimator,Initial error (pp),Time to settle within 0.5pp (s)
+Coulomb Counting,6.004,never
+Extended Kalman Filter,1.278,16
